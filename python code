@@ -1,0 +1,35 @@
+#Import Dependencies:
+import pandas as pd
+import numpy as np
+from pandas_datareader import data, wb
+import datetime as dt
+import matplotlib.pyplot as plt
+%matplotlib inline
+%pylab inline
+pylab.rcParams['figure.figsize'] = (15,9)
+
+# print(plt.style.available)
+plt.style.use('seaborn-white')
+
+# List of Securities to Pull with Desired Start Date:
+etfs = ['IXN','IXJ','REET','IXC','KXI','IXG','EXI','RXI','JXI','IXP']
+closing_df = data.DataReader(etfs, 'yahoo', dt.datetime(2019,1,1))['Adj Close']
+closing_df.head()
+
+#Rename Columns:
+closing_df.columns = ['Industrials (EXI)','Energy (IXC)','Financials (IXG)','Health Care (IXJ)','Technology (IXN)',
+                      'Telecom (IXP)','Utilities (JXI)','Consumer Staples (KXI)','Real Estate (REET)','Consumer Consumer Discretionary (RXI)']
+closing_df.head()
+
+#Set Returns to Base Rate:
+stock_return = closing_df.apply(lambda x:x/x[0])
+stock_return.head()-1
+
+#Plot Returns: 
+stock_return.plot(grid=True).axhline(y=1,color='black',lw=2)
+plt.title('Global Sector Excess Returns')
+
+# Put a Legend Below X-axis:
+legend(loc='upper center', bbox_to_anchor=(.5, -.15),
+          fancybox=True, shadow=True, ncol=5)
+          
